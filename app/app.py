@@ -8,8 +8,8 @@ from re import A
 from flask import Flask, request, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-from app.database.models import Actor, Movie, setup_db
-
+from database.models import Actor, Movie, setup_db
+from auth.auth import AuthError, requires_auth
 #--------------------------------------#
 # Configuration -----------------------#
 #--------------------------------------#
@@ -17,7 +17,7 @@ from app.database.models import Actor, Movie, setup_db
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__)
-
+    setup_db(app)
     # CORS
     CORS(app, resources={r"/*":{"origins": "*"}})
 
@@ -37,7 +37,12 @@ def create_app(test_config=None):
     #--------------------------------------#
     # Routes ------------------------------#
     #--------------------------------------#
-    @app.route('/actors', methods='GET')
+    @app.route('/')
+    def health():
+        return jsonify({'health': 'Running!!'}), 200
+
+
+    @app.route('/actors', methods=['GET'])
     @requires_auth("get:actors")
     def get_actors(payload):
       actors_raw = Actor.query.all()
@@ -48,7 +53,7 @@ def create_app(test_config=None):
       }), 200
 
     
-    @app.route('/actors/<int:actor_id>', methods='GET')
+    @app.route('/actors/<int:actor_id>', methods=['GET'])
     @requires_auth('get:actors-detail')
     def get_actor(payload, actor_id):
       actor = Actor.query.get_or_404(actor_id)
@@ -59,7 +64,7 @@ def create_app(test_config=None):
       }), 200
 
 
-    @app.route('/actors', methods='POST')
+    @app.route('/actors', methods=['POST'])
     @requires_auth('post:actor')
     def post_actor(payload):
       try:
@@ -81,7 +86,7 @@ def create_app(test_config=None):
           abort(422)
 
 
-    @app.route('/actors/<int:actor_id>', methods='PATCH')
+    @app.route('/actors/<int:actor_id>', methods=['PATCH'])
     @requires_auth('patch:actor')
     def update_actor(payload, actor_id):
         actor = Actor.query.get_or_404(actor_id)
@@ -107,7 +112,7 @@ def create_app(test_config=None):
             abort(422)
 
     
-    @app.route('/actors/<int:actor_id>', methods='DELETE')
+    @app.route('/actors/<int:actor_id>', methods=['DELETE'])
     @requires_auth('delete:actor')
     def delete_actor(payload, actor_id):
         actor = Actor.query.get_or_404(actor_id)
@@ -124,7 +129,7 @@ def create_app(test_config=None):
             print(str(Exception))
             abort(500)
 #---------------------------------------------
-    @app.route('/movies', methods='GET')
+    @app.route('/movies', methods=['GET'])
     @requires_auth("get:movies")
     def get_movies(payload):
       movies_raw = Movie.query.all()
@@ -135,7 +140,7 @@ def create_app(test_config=None):
       }), 200
 
     
-    @app.route('/movies/<int:movie_id>', methods='GET')
+    @app.route('/movies/<int:movie_id>', methods=['GET'])
     @requires_auth('get:movies-detail')
     def get_movie(payload, movie_id):
       movie = Movie.query.get_or_404(movie_id)
@@ -146,7 +151,7 @@ def create_app(test_config=None):
       }), 200
 
 
-    @app.route('/movies', methods='POST')
+    @app.route('/movies', methods=['POST'])
     @requires_auth('post:movie')
     def post_movie(payload):
       try:
@@ -172,7 +177,7 @@ def create_app(test_config=None):
           abort(422)
 
 
-    @app.route('/movies/<int:movie_id>', methods='PATCH')
+    @app.route('/movies/<int:movie_id>', methods=['PATCH'])
     @requires_auth('patch:movie')
     def update_movie(payload, movie_id):
         movie = Movie.query.get_or_404(movie_id)
@@ -200,7 +205,7 @@ def create_app(test_config=None):
             abort(422)
 
     
-    @app.route('/movies/<int:movie_id>', methods='DELETE')
+    @app.route('/movies/<int:movie_id>', methods=['DELETE'])
     @requires_auth('delete:movie')
     def delete_movie(payload, movie_id):
         movie = Movie.query.get_or_404(movie_id)
