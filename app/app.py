@@ -25,13 +25,14 @@ def create_app(test_config=None):
     @app.after_request
     def after_request(response):
         response.headers.add(
-          "Access-Control-Allow-Headers",
-          "Content-Type, Authorication"
+            "Access-Control-Allow-Headers",
+            "Content-Type, Authorication"
         )
         response.headers.add(
-          "Access-Control-Allow-Methods",
-          "GET, POST, PATCH, DELETE, OPTIONS"
+            "Access-Control-Allow-Methods",
+            "GET, POST, PATCH, DELETE, OPTIONS"
         )
+        
         return response
 
     #--------------------------------------#
@@ -45,45 +46,45 @@ def create_app(test_config=None):
     @app.route('/actors', methods=['GET'])
     @requires_auth("get:actors")
     def get_actors(payload):
-      actors_raw = Actor.query.all()
+        actors_raw = Actor.query.all()
 
-      return jsonify({
-        "success": True,
-        "actors": [actor.short() for actor in actors_raw]
-      }), 200
+        return jsonify({
+            "success": True,
+            "actors": [actor.short() for actor in actors_raw]
+        }), 200
 
     
     @app.route('/actors/<int:actor_id>', methods=['GET'])
     @requires_auth('get:actors-detail')
     def get_actor(payload, actor_id):
-      actor = Actor.query.get_or_404(actor_id)
+        actor = Actor.query.get_or_404(actor_id)
 
-      return jsonify({
-        "success": True,
-        "actor": actor.long()
-      }), 200
+        return jsonify({
+            "success": True,
+            "actor": actor.long()
+        }), 200
 
 
     @app.route('/actors', methods=['POST'])
     @requires_auth('post:actor')
     def post_actor(payload):
-      try:
-          request_data = request.get_json()
-          if 'name' not in request_data \
-              or 'age' not in request_data \
-              or 'gender' not in request_data:
-              abort(422)
-          actor = Actor(name=request_data['name'], age=request_data['age'], gender=request_data['gender'])
-          actor.insert() 
+        try:
+            request_data = request.get_json()
+            if 'name' not in request_data \
+                or 'age' not in request_data \
+                or 'gender' not in request_data:
+                abort(422)
+            actor = Actor(name=request_data['name'], age=request_data['age'], gender=request_data['gender'])
+            actor.insert() 
 
-          return jsonify ({
-              "success": True,
-              "actor": actor.short()
-          }), 200
-      
-      except Exception:
-          print(str(Exception))
-          abort(422)
+            return jsonify ({
+                "success": True,
+                "actor": actor.short()
+            }), 200
+        
+        except Exception:
+            print(str(Exception))
+            abort(422)
 
 
     @app.route('/actors/<int:actor_id>', methods=['PATCH'])
@@ -121,8 +122,8 @@ def create_app(test_config=None):
             actor.delete()
             
             return jsonify({
-              "success": True,
-              "deleted_actor": actor.short()
+                "success": True,
+                "deleted_actor": actor.short()
             }), 200
 
         except Exception:
@@ -132,49 +133,49 @@ def create_app(test_config=None):
     @app.route('/movies', methods=['GET'])
     @requires_auth("get:movies")
     def get_movies(payload):
-      movies_raw = Movie.query.all()
+        movies_raw = Movie.query.all()
 
-      return jsonify({
-        "success": True,
-        "movies": [movie.short() for movie in movies_raw]
-      }), 200
+        return jsonify({
+            "success": True,
+            "movies": [movie.short() for movie in movies_raw]
+        }), 200
 
     
     @app.route('/movies/<int:movie_id>', methods=['GET'])
     @requires_auth('get:movies-detail')
     def get_movie(payload, movie_id):
-      movie = Movie.query.get_or_404(movie_id)
+        movie = Movie.query.get_or_404(movie_id)
 
-      return jsonify({
-        "success": True,
-        "movie": movie.long()
-      }), 200
+        return jsonify({
+            "success": True,
+            "movie": movie.long()
+        }), 200
 
 
     @app.route('/movies', methods=['POST'])
     @requires_auth('post:movie')
     def post_movie(payload):
-      try:
-          request_data = request.get_json()
-          if 'name' not in request_data \
-              or 'release_year' not in request_data \
-              or 'duration' not in request_data \
-              or 'genre' not in request_data:
-              abort(422)
-          movie = Movie(name=request_data['name'], \
-              release_year=request_data['release_year'], \
-              duration=request_data['duration'], \
-              genre=request_data['genre'])
-          movie.insert() 
+        try:
+            request_data = request.get_json()
+            if 'name' not in request_data \
+                or 'release_year' not in request_data \
+                or 'duration' not in request_data \
+                or 'genre' not in request_data:
+                abort(422)
+            movie = Movie(name=request_data['name'], \
+                release_year=request_data['release_year'], \
+                duration=request_data['duration'], \
+                genre=request_data['genre'])
+            movie.insert() 
 
-          return jsonify ({
-              "success": True,
-              "actor": movie.short()
-          }), 200
-      
-      except Exception:
-          print(str(Exception))
-          abort(422)
+            return jsonify ({
+                "success": True,
+                "actor": movie.short()
+            }), 200
+        
+        except Exception:
+            print(str(Exception))
+            abort(422)
 
 
     @app.route('/movies/<int:movie_id>', methods=['PATCH'])

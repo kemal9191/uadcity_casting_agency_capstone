@@ -9,7 +9,7 @@ from flask_sqlalchemy import SQLAlchemy
 #--------------------------------------#
 # Database Configuration --------------#
 #--------------------------------------#
-database_uri = os.environ.get('DATABASE_URI')
+database_uri = "postgresql://postgres@localhost:5432/capstone"
 
 db = SQLAlchemy()
 
