@@ -8,7 +8,7 @@ from urllib.request import urlopen
 import rsa
 
 
-AUTH0_DOMAIN = 'dev-eoxed4z8.us.auth0.com'
+AUTH0_DOMAIN = 'dev-bu4geff9.us.auth0.com'
 ALGORITHMS = ['RS256']
 API_AUDIENCE = 'capstone'
 

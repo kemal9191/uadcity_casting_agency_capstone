@@ -129,7 +129,8 @@ def create_app(test_config=None):
         except Exception:
             print(str(Exception))
             abort(500)
-#---------------------------------------------
+
+
     @app.route('/movies', methods=['GET'])
     @requires_auth("get:movies")
     def get_movies(payload):
@@ -170,7 +171,7 @@ def create_app(test_config=None):
 
             return jsonify ({
                 "success": True,
-                "actor": movie.short()
+                "movie": movie.short()
             }), 200
         
         except Exception:
@@ -215,8 +216,8 @@ def create_app(test_config=None):
             movie.delete()
             
             return jsonify({
-              "success": True,
-              "deleted_movie": movie.short()
+                "success": True,
+                "deleted_movie": movie.short()
             }), 200
             
         except Exception:
@@ -226,27 +227,27 @@ def create_app(test_config=None):
     @app.errorhandler(400)
     def bad_request(error):
         return jsonify({
-          "success": False,
-          "error": 400,
-          "message": "Bad Request"
+            "success": False,
+            "error": 400,
+            "message": "Bad Request"
         }), 400
 
 
     @app.errorhandler(401)
     def bad_request(error):
         return jsonify({
-          "success": False,
-          "error": 401,
-          "message": "Unauthorized"
+            "success": False,
+            "error": 401,
+            "message": "Unauthorized"
         }), 401
 
 
     @app.errorhandler(400)
     def bad_request(error):
         return jsonify({
-          "success": False,
-          "error": 400,
-          "message": "Bad Request"
+            "success": False,
+            "error": 400,
+            "message": "Bad Request"
         }), 400
 
     @app.errorhandler(404)
@@ -284,14 +285,6 @@ def create_app(test_config=None):
             "message": "Internal Server Error"
         }), 500
 
-
-    @app.errorhandler(AuthError)
-    def auth_error(error):
-        return jsonify({
-            "success": False,
-            "error": error.status_code,
-            "message": error.error['description']
-        })
 
     return app
 

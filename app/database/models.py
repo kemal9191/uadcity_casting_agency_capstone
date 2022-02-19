@@ -4,6 +4,7 @@
 
 import os
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 
 
 #--------------------------------------#
@@ -12,6 +13,7 @@ from flask_sqlalchemy import SQLAlchemy
 database_uri = "postgresql://postgres@localhost:5432/capstone"
 
 db = SQLAlchemy()
+migrate = Migrate()
 
 def setup_db(app):
     app.config['SQLALCHEMY_DATABASE_URI'] = database_uri
@@ -85,8 +87,7 @@ class Movie(db.Model):
     def __repr__(self):
         return f"<Movie {self.name} has been created with id of {self.id}"
     
-    def __init__(self, id, name, release_year, duration, genre):
-        self.id = id
+    def __init__(self, name, release_year, duration, genre):
         self.name = name
         self.release_year = release_year
         self.duration = duration
