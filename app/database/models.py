@@ -10,7 +10,7 @@ from flask_migrate import Migrate
 #--------------------------------------#
 # Database Configuration --------------#
 #--------------------------------------#
-database_uri = "postgresql://postgres@localhost:5432/capstone"
+database_uri = "postgres://nbfnrmywfnozsa:c60111e86776c5c932de8c9f1a3d3909a09669c7c1283e0c02adbc37516dcc6b@ec2-52-201-168-60.compute-1.amazonaws.com:5432/d13s67jkv5bmuo"
 
 db = SQLAlchemy()
 migrate = Migrate()
